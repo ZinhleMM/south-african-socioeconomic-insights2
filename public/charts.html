@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHS 2023 Data Visualisations</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dark-mode.css" id="theme-style">
+    
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">South African Socioeconomic Insights</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="charts.html">Charts</a>
+            <a href="maps.html" class="active">Maps</a>
+            <a href="about.html">About</a>
+            <button id="theme-toggle" aria-label="Toggle dark mode">
+                <span class="theme-icon">🌓</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <section class="charts-section">
+            <h1>Data Visualisations</h1>
+            <p>Explore key insights from the General Household Survey 2023 through interactive charts.</p>
+
+            <!-- Chart Containers -->
+            <div class="charts-grid">
+                <!-- Household Income Distribution -->
+                <div class="chart-container">
+                    <h2>Household Income Distribution</h2>
+                    <canvas id="incomeChart"></canvas>
+                </div>
+
+                <!-- Food Security Status -->
+                <div class="chart-container">
+                    <h2>Food Security Status</h2>
+                    <canvas id="foodSecurityChart"></canvas>
+                </div>
+
+                <!-- Access to Services -->
+                <div class="chart-container">
+                    <h2>Access to Basic Services</h2>
+                    <canvas id="servicesChart"></canvas>
+                </div>
+
+                <!-- Internet Access by Province -->
+                <div class="chart-container">
+                    <h2>Internet Access by Province</h2>
+                    <canvas id="internetAccessChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 South African Household Survey Insights</p>
+        <p>Data Source: Statistics South Africa - General Household Survey 2023</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/charts.js"></script>
+</body>
+</html>

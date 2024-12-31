@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHS 2023 - Geographic Insights</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dark-mode.css" id="theme-style">
+
+    <!-- Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+
+    <!-- Chart.js for additional visualisations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
+    <style>
+        .map-container {
+            height: 500px;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .metrics-panel {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .legend {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .filters {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">South African Socioeconomic Insights</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="charts.html">Charts</a>
+            <a href="maps.html" class="active">Maps</a>
+            <a href="about.html">About</a>
+            <button id="theme-toggle" aria-label="Toggle dark mode">
+                <span class="theme-icon">🌓</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <h1>Geographic Distribution of Household Data</h1>
+
+        <!-- Filters -->
+        <section class="filters">
+            <div class="filter-group">
+                <label for="metric-select">Select Metric:</label>
+                <select id="metric-select">
+                    <option value="household_size">Average Household Size</option>
+                    <option value="income">Median Household Income</option>
+                    <option value="food_security">Food Security Index</option>
+                    <option value="services">Access to Services</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="province-select">Province:</label>
+                <select id="province-select">
+                    <option value="all">All Provinces</option>
+                    <option value="WC">Western Cape</option>
+                    <option value="EC">Eastern Cape</option>
+                    <option value="NC">Northern Cape</option>
+                    <option value="FS">Free State</option>
+                    <option value="KZN">KwaZulu-Natal</option>
+                    <option value="NW">North West</option>
+                    <option value="GP">Gauteng</option>
+                    <option value="MP">Mpumalanga</option>
+                    <option value="LP">Limpopo</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Map Container -->
+        <section class="map-container" id="sa-map"></section>
+
+        <!-- Metrics Panel -->
+        <section class="metrics-panel">
+            <h2>Provincial Statistics</h2>
+            <div id="provincial-stats"></div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 South African Household Survey Insights</p>
+        <p>Data Source: Statistics South Africa - General Household Survey 2023</p>
+    </footer>
+
+    <script>
+        // Initialise map centered on South Africa
+        const map = L.map('sa-map').setView([-30.5595, 22.9375], 5);
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Sample GeoJSON data structure for provinces
+        const provincesData = {
+            "type": "FeatureCollection",
+            "features": [
+                // Provinces will be added here from database
+            ]
+        };
+
+        // Style function for provinces
+        function getColor(value) {
+            return value > 80 ? '#800026' :
+                   value > 60 ? '#BD0026' :
+                   value > 40 ? '#E31A1C' :
+                   value > 20 ? '#FC4E2A' :
+                               '#FFEDA0';
+        }
+
+        function style(feature) {
+            return {
+                fillColor: getColor(feature.properties.value),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                fillOpacity: 0.7
+            };
+        }
+
+        // Interactive features
+        function highlightFeature(e) {
+            const layer = e.target;
+            layer.setStyle({
+                weight: 3,
+                color: '#666',
+                fillOpacity: 0.9
+            });
+        }
+
+        function resetHighlight(e) {
+            geojsonLayer.resetStyle(e.target);
+        }
+
+        function onEachFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight,
+                click: zoomToFeature
+            });
+        }
+
+        function zoomToFeature(e) {
+            map.fitBounds(e.target.getBounds());
+            updateProvincialStats(e.target.feature.properties);
+        }
+
+        // Update provincial statistics
+        function updateProvincialStats(properties) {
+            const statsDiv = document.getElementById('provincial-stats');
+            statsDiv.innerHTML = `
+                <h3>${properties.name}</h3>
+                <p>Average Household Size: ${properties.avgHouseholdSize}</p>
+                <p>Median Income: R${properties.medianIncome}</p>
+                <p>Food Security Index: ${properties.foodSecurityIndex}%</p>
+            `;
+        }
+
+        // Event listeners
+        document.getElementById('metric-select').addEventListener('change', function(e) {
+            // Update map based on selected metric
+            updateMap(e.target.value);
+        });
+
+        document.getElementById('province-select').addEventListener('change', function(e) {
+            // Update map based on selected province
+            filterByProvince(e.target.value);
+        });
+
+        // Initialise map with default metric
+        updateMap('household_size');
+    </script>
+</body>
+</html>

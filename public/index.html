@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">`
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>South African Household Survey Insights</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dark-mode.css" id="theme-style">
+    
+    <!-- Third-party Libraries -->
+    <!-- Chart.js for data visualisation -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet.js for maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">South African Socioeconomic Insights</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="charts.html">Charts</a>
+            <a href="maps.html" class="active">Maps</a>
+            <a href="about.html">About</a>
+            <button id="theme-toggle" aria-label="Toggle dark mode">
+                <span class="theme-icon">🌓</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <h1>South African Household Survey Insights</h1>
+            <p>Exploring socioeconomic patterns across South African households using GHS 2023 data</p>
+        </section>
+
+        <!-- Key Metrics Dashboard -->
+        <section id="dashboard" class="metrics-dashboard">
+            <h2>Key Insights</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h3>Households Surveyed</h3>
+                    <p id="total-households">Loading...</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Average Household Size</h3>
+                    <p id="avg-household-size">Loading...</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Food Security Index</h3>
+                    <p id="food-security-index">Loading...</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Internet Access</h3>
+                    <p id="internet-access">Loading...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visualisation Section -->
+        <section id="visualisations" class="visualisations">
+            <h2>Data Visualisations</h2>
+            
+            <!-- Provincial Map -->
+            <div class="viz-container">
+                <h3>Geographic Distribution</h3>
+                <div id="sa-map" class="map-container"></div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                <!-- Household Income Distribution -->
+                <div class="chart-container">
+                    <h3>Income Distribution</h3>
+                    <canvas id="income-chart"></canvas>
+                </div>
+
+                <!-- Food Security Status -->
+                <div class="chart-container">
+                    <h3>Food Security Status</h3>
+                    <canvas id="food-security-chart"></canvas>
+                </div>
+
+                <!-- Household Services -->
+                <div class="chart-container">
+                    <h3>Access to Services</h3>
+                    <canvas id="services-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analysis Tools -->
+        <section id="analysis" class="analysis-tools">
+            <h2>Analysis Tools</h2>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="province-select">Province:</label>
+                    <select id="province-select">
+                        <option value="all">All Provinces</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="income-range">Income Range:</label>
+                    <select id="income-range">
+                        <option value="all">All Ranges</option>
+                    </select>
+                </div>
+                <button id="apply-filters">Apply Filters</button>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <h2>About This Project</h2>
+            <p>This web application visualises data from the General Household Survey 2023, 
+               providing insights into socioeconomic conditions across South Africa.</p>
+            <div class="data-source">
+                <h3>Data Source</h3>
+                <p>Statistics South Africa. "General Household Survey 2023." Stats SA, 2023.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 South African Household Survey Insights</p>
+        <p>Data Source: Statistics South Africa - General Household Survey 2023</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/maps.js"></script>
+</body>
+</html>
